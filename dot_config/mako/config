@@ -1,0 +1,6 @@
+font=JetBrainsMono Nerd Font
+border-radius=10
+default-timeout=5000
+
+include=~/.config/mako/colors
+

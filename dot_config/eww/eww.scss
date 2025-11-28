@@ -1,0 +1,61 @@
+@use 'colors' as *;
+
+$border-color:  $primary;
+$bg-color:      $on-primary;
+$fg-color:      $tertiary;
+$bg-slider:     $surface-container;
+
+/* Global styles */
+* {
+  all: unset;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 14px;
+}
+
+/* Base popup styles */
+.popup-box {
+  background-color: $bg-color;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid $border-color;
+}
+
+.popup-label {
+  color: $fg-color;
+  font-weight: bold;
+}
+
+/* Slider Styling */
+scale trough {
+  all: unset;
+  background-color: $bg-slider;
+  border-radius: 5px;
+  min-height: 10px;
+  min-width: 120px;
+}
+
+scale trough highlight {
+  background-color: $fg-color;
+  border-radius: 5px 0px 0px 5px;
+}
+scale slider {
+  all: unset;
+  background-color: $fg-color;
+  border-radius: 2px;
+  min-height: 14px;
+  min-width: 4px;
+  margin: -2px;
+  margin-right: 3px;
+}
+
+/* Icon Font Definitions */
+.icon-label {
+  font-family: "Material Symbols Rounded";
+  font-size: 24px;
+  color: $fg-color;
+}
+
+/* Helper for empty window */
+.empty {
+  background: transparent;
+}

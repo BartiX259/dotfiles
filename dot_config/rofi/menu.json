@@ -1,0 +1,46 @@
+[
+  {
+    "label": "Power Menu",
+    "icon": "\ue8ac",
+    "submenu": [
+      { "label": "Shutdown", "icon": "\ue8ac", "action": "loginctl poweroff" },
+      { "label": "Reboot", "icon": "\ue042", "action": "loginctl reboot" },
+      { "label": "Logout", "icon": "\ue9ba", "action": "pkill niri" }
+    ]
+  },
+  {
+    "label": "Install",
+    "icon": "\uf090",
+    "action": "alacritty --class float -e omarchy-pkg-install"
+  },
+  {
+    "label": "Remove",
+    "icon": "\ue872",
+    "action": "alacritty --class float -e omarchy-pkg-remove"
+  },
+  { 
+    "label": "Update",
+    "icon": "\ue923",
+    "action": "alacritty --class float -e omarchy-update"
+  },
+  {
+    "label": "Wallpaper",
+    "icon": "\ue1bc",
+    "action": "~/.config/rofi/bgselector.sh"
+  },
+  {
+    "label": "Network",
+    "icon": "\ue63e",
+    "action": "alacritty --class float -e omarchy-network"
+  },
+  {
+    "label": "Audio",
+    "icon": "\ue050",
+    "action": "alacritty --class float -e wiremix"
+  },
+  {
+    "label": "Launch",
+    "icon": "\ue5c3",
+    "action": "~/.config/rofi/launcher.sh"
+  }
+]

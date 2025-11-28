@@ -1,0 +1,20 @@
+/* launcher.rasi - Application Launcher */
+
+/*****----- Configuration -----*****/
+configuration {
+    modi:                       "drun";
+    show-icons:                 true;
+    display-drun:               "Apps";
+    drun-display-format:        "{name}";
+    sort: true;
+    sorting-method: "fzf";
+}
+
+/*****----- Import Library -----*****/
+@import "theme.rasi"
+
+/* Override: You can change specific things here if you want */
+window {
+    /* For example, the launcher can be wider if you want */
+    width: 900px; 
+}

@@ -1,0 +1,22 @@
+[config]
+
+[templates.alacritty]
+input_path = '~/.config/matugen/templates/alacritty.toml'
+output_path = '~/.config/alacritty/colors.toml'
+
+[templates.mako]
+input_path = '~/.config/matugen/templates/mako.ini'
+output_path = '~/.config/mako/colors'
+post_hook = 'makoctl reload'
+
+[templates.waybar]
+input_path = '~/.config/matugen/templates/colors.css'
+output_path = '~/.config/waybar/colors.css'
+
+[templates.eww]
+input_path = '~/.config/matugen/templates/colors.scss'
+output_path = '~/.config/eww/colors.scss'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi-colors.rasi'
+output_path = '~/.config/rofi/colors.rasi'

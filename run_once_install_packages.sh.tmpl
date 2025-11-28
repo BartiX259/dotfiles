@@ -1,0 +1,76 @@
+#!/bin/bash
+set -e
+
+# --- 1. Package List ---
+PACKAGES="git alacritty neovim fish waybar rofi-wayland niri nemo firefox fzf jq unzip fd gum imagemagick mako swww pamixer btop github-cli ttf-jetbrains-mono-nerd matugen wiremix ttf-material-symbols-variable"
+
+{{ if .is_laptop }}
+    PACKAGES="$PACKAGES acpi brightnessctl"
+{{ end }}
+
+# --- 2. Distro Configuration ---
+INSTALL_CMD=""
+declare -A REPLACEMENTS
+
+if command -v pacman >/dev/null; then
+    # Arch Setup
+    sudo pacman -S --noconfirm --needed base-devel rust
+
+    if ! command -v paru >/dev/null; then
+        echo "Installing Paru..."
+        git clone https://aur.archlinux.org/paru.git /tmp/paru
+        (cd /tmp/paru && makepkg -si --noconfirm)
+        rm -rf /tmp/paru
+    fi
+
+    INSTALL_CMD="paru -S --noconfirm --needed"
+
+elif command -v apk >/dev/null; then
+    # Alpine Setup
+    grep -q "community" /etc/apk/repositories || echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" | sudo tee -a /etc/apk/repositories
+    grep -q "testing" /etc/apk/repositories || echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" | sudo tee -a /etc/apk/repositories
+    sudo apk update
+    sudo apk add cargo rust openssl-dev build-base
+
+    INSTALL_CMD="sudo apk add"
+
+    REPLACEMENTS=(
+        ["ttf-jetbrains-mono-nerd"]="font-jetbrains-mono-nerd"
+        ["ttf-material-symbols-variable"]="font-material-icons"
+        ["matugen"]="__CARGO__"
+    )
+fi
+
+# --- 3. Process Replacements ---
+FINAL_SYS_LIST=""
+FINAL_CARGO_LIST=""
+
+for pkg in $PACKAGES; do
+    if [[ -v "REPLACEMENTS[$pkg]" ]]; then
+        VAL="${REPLACEMENTS[$pkg]}"
+        if [[ "$VAL" == "__CARGO__" ]]; then
+            FINAL_CARGO_LIST="$FINAL_CARGO_LIST $pkg"
+        else
+            FINAL_SYS_LIST="$FINAL_SYS_LIST $VAL"
+        fi
+    else
+        FINAL_SYS_LIST="$FINAL_SYS_LIST $pkg"
+    fi
+done
+
+# --- 4. Install ---
+if [ -n "$FINAL_SYS_LIST" ]; then
+    echo "Installing system packages..."
+    $INSTALL_CMD $FINAL_SYS_LIST
+fi
+
+if [ -n "$FINAL_CARGO_LIST" ]; then
+    echo "Installing Cargo packages..."
+    for cargo_pkg in $FINAL_CARGO_LIST; do
+        if ! command -v $cargo_pkg >/dev/null; then
+            cargo install $cargo_pkg
+        fi
+    done
+fi
+
+echo "Done."

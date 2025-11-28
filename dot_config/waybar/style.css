@@ -1,0 +1,133 @@
+@import "colors.css";
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font";
+    padding: 0;
+    margin: 0;
+    min-width: 10px;
+    background: transparent;
+}
+
+window.#waybar {
+    min-width: 40px;
+    background: @surface;
+}
+
+tooltip,
+#tray menu {
+    background: alpha(#262626, 0.999);
+    border-radius: 8px;
+    padding: 1px 2px;
+}
+
+#top,
+#workspaces,
+#bottom {
+    background: @surface_container;
+    padding: 8px 0;
+    border-radius: 0 16px 16px 0;
+}
+
+box.empty {
+    font-size: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#privacy {
+    margin: 4px 0;
+    padding: 4px 0;
+    background: @surface_bright;
+    border-radius: 8px;
+}
+
+#taskbar > * {
+    margin: 4px 0;
+}
+
+#workspaces {
+    min-width: 0;
+    padding: 8px 14px;
+    margin: 20px 0;
+}
+
+#workspaces button {
+    font-size: 7px;
+    color: transparent;
+    background: @surface_bright;
+    transition: all 0.2s ease-in-out;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 9999px;
+    margin: 3px 0;
+}
+
+#workspaces button.active {
+    background: @primary;
+    min-height: 20px;
+}
+
+#bottom,
+#top {
+    color: @on_surface;
+}
+
+#network {
+    margin-bottom: 8px;
+}
+
+#clock {
+    /* padding-left: 4px; */
+    font-size: 14px;
+}
+
+
+#custom-separator {
+    font-family: "Material Symbols Rounded";
+    margin: -10px 0;
+    margin-left: 0px;
+    font-size: 28px;
+    color: @surface_bright;
+}
+
+#battery,
+#bluetooth,
+#network,
+#pulseaudio {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 18px;
+}
+
+#battery,
+#bluetooth,
+#network,
+#pulseaudio {
+    font-family: "Material Symbols Rounded";
+}
+
+
+#battery {
+    font-size: 18px;
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+#battery.warning {
+    color: @tertiary;
+}
+
+#battery.critical {
+    color: @error;
+}
+
+#battery.charging {
+    color: @primary;
+}
+
+#tray,
+#network {
+    margin-top: 8px;
+}

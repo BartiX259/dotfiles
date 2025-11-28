@@ -1,0 +1,31 @@
+/* applet.rasi - For Scripts/Powermenus */
+
+/*****----- Configuration -----*****/
+configuration {
+    show-icons:                 false;
+    sort: true;
+    sorting-method: "fzf";
+}
+
+/*****----- Import Library -----*****/
+@import "theme.rasi"
+
+/*****----- Overrides -----*****/
+/* Applets usually have fewer items, so we shrink the list */
+
+window {
+    /* For example, the launcher can be wider if you want */
+    width: 800px; 
+}
+listview {
+    lines: 6;
+}
+
+/* Optional: Change the placeholder text for the applet */
+entry {
+    placeholder: "Search";
+}
+element {
+    /* Top/Bottom: 40px, Left/Right: 10px */
+    padding: 14px 10px; 
+}

@@ -1,0 +1,46 @@
+@theme "/dev/null"
+
+configuration {
+    show-icons: true;
+    hover-select: true;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}
+
+@import "colors.rasi"
+
+* {
+    background-color: transparent;
+}
+
+window {
+    height: 560px;
+}
+
+// Main Box
+mainbox {
+    children: [listview];
+    background-color: @surface;
+    padding: 10px 0px;
+    border-radius: 20px;
+}
+
+// Listview
+listview {
+    padding: 0px 10px;
+    spacing: 10px;
+    columns: 7;
+    flow: horizontal;
+    children: [element-icon];
+}
+element {
+    border-radius: 10px;
+}
+element.selected {
+    border: 2px;
+    border-color: @primary;
+}
+element-icon {
+    size: 229px 540px;
+    horizontal-align: 0;
+}

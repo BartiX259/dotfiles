@@ -1,0 +1,99 @@
+[
+    {
+        "layer": "top",
+        "position": "left",
+        "orientation": "vertical",
+        "reload_style_on_change": true,
+        "exclusive": true,
+        "modules-center": [
+            "niri/workspaces",
+            "group/bottom"
+        ],
+        "group/bottom": {
+            "orientation": "inherit",
+            "modules": [
+                "network",
+                "pulseaudio",
+                "battery",
+                "custom/separator",
+                "clock"
+            ]
+        },
+        "niri/workspaces": {
+            "format": "{index}",
+            "all-outputs": true
+        },
+        "network": {
+            "interface": "wlan0",
+            "format-wifi": "\ue63e",
+            "format-disconnected": "\ue648",
+            "format-disabled": "\ue648",
+            "format-ethernet": "\ue8be",
+            "format-icons": [
+                "\ue4ca",
+                "\ue4d9",
+                "\ue63e"
+            ],
+            "format": "\ue648",
+            "tooltip": false,
+            "on-click": "~/.config/rofi/menu.sh"
+        },
+        "pulseaudio": {
+            "format": "{icon}",
+            "format-bluetooth": "{icon}",
+            "format-muted": "\ue04f",
+            "format-icons": {
+                "headphone": "\uf01f",
+                "default": [
+                    "\ue79c",
+                    "\ue050"
+                ]
+            },
+            "scroll-step": 1,
+            "tooltip": false,
+            "on-click": "~/.config/rofi/menu.sh"
+        },
+        "battery": {
+            "states": {
+                "warning": 20,
+                "critical": 10
+            },
+            "format-full": "\ue1a4",
+            "format": "{icon}",
+            "format-icons": {
+                "charging": [
+                    "\ue1a3",
+                    "\uf0a2",
+                    "\uf0a3",
+                    "\uf0a4",
+                    "\uf0a5",
+                    "\uf0a6",
+                    "\uf0a7"
+                ],
+                "default": [
+                    "\uebdc",
+                    "\uebd9",
+                    "\uebe0",
+                    "\uebdd",
+                    "\uebe2",
+                    "\uebd4",
+                    "\uebd2",
+                    "\ue1a4"
+                ]
+            },
+            "interval": 5,
+            "tooltip": false,
+            "on-click": "~/.config/rofi/menu.sh"
+        },
+        "custom/separator": {
+            "format": "\uf108",
+            "tooltip": false,
+            "on-click": "~/.config/rofi/menu.sh"
+        },
+        "clock": {
+            "format": "{:%H\n%M}",
+            "tooltip": false,
+            "on-click": "~/.config/rofi/menu.sh"
+        }
+    }
+]

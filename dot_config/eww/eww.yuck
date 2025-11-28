@@ -1,0 +1,115 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; WIDGETS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defwidget slider [variable onchange]
+  (scale :min 0 :max 101 :value variable :onchange onchange))
+
+(defwidget wifi_icon []
+  (label :class "icon-label" :text {wifi_state == 'Enabled' ? "\\ue63e" : "\\ue648"}))
+
+(defwidget speaker_icon []
+  (label :class "icon-label" :text {is_headphone == 'yes' ? 
+    (speaker_mute == 'muted' ? "\\ue33a" : "\\uf01f")
+    : (speaker_mute == 'muted' ? "\\ue04f" : (volume < 50 ? "\\ue04d" : "\\ue050"))}))
+
+(defwidget battery_icon []
+  (label :class "icon-label" :text {
+    battery_status == "Full" ? "\\ue1a4" :    ; Full
+    (battery_status == "Charging" ?
+      (battery_percent > 90 ? "\\uf0a7" :     ; Charging 90+
+      (battery_percent > 80 ? "\\uf0a6" :     ; Charging 80+
+      (battery_percent > 60 ? "\\uf0a5" :     ; Charging 60+
+      (battery_percent > 50 ? "\\uf0a4" :     ; Charging 50+
+      (battery_percent > 30 ? "\\uf0a3" :     ; Charging 30+
+      (battery_percent > 20 ? "\\uf0a2" :     ; Charging 20+
+      "\\ue1a3"				      ; Charging 0+
+      )))))) :
+      (battery_percent > 95 ? "\\ue1a4" :     ; Full
+      (battery_percent > 85 ? "\\uebd2" :     ; 6 bar
+      (battery_percent > 70 ? "\\uebd4" :     ; 5 bar
+      (battery_percent > 55 ? "\\uebe2" :     ; 4 bar
+      (battery_percent > 40 ? "\\uebdd" :     ; 3 bar
+      (battery_percent > 20 ? "\\uebe0" :     ; 2 bar
+      (battery_percent > 10 ? "\\uebd9" :     ; 1 bar
+      "\\uebdc"))))))))			      ; 0 bar
+  }))
+
+(defwidget mic_icon []
+  (label :class "icon-label" :text {mic_mute == 'unmuted' ? "\\ue029" : "\\ue02b"}))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; VARIABLES & POLLING
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar volume 0)
+(defvar brightness_percent 0)
+(defvar wifi_ssid "...")
+(defvar wifi_state "disabled")
+(defvar speaker_mute "muted")
+(defvar is_headphone "no")
+(defvar mic_mute "muted")
+(defvar battery_status "Unknown")
+(defvar battery_percent 0)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; WINDOWS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Audio Volume Popup
+(defwindow volume_popup
+  :monitor 0
+  :geometry (geometry :x "0%" :y "10px" :width "200px" :height "50px" :anchor "bottom center")
+  :stacking "overlay" :windowtype "dock" :wm-ignore false
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+    (speaker_icon)
+    (slider :variable volume :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}% && eww update volume={}")
+    ))
+
+;; Brightness Popup
+(defwindow brightness_popup
+  :monitor 0
+  :geometry (geometry :x "0%" :y "10px" :width "200px" :height "50px" :anchor "bottom center")
+  :stacking "overlay" :windowtype "dock" :wm-ignore false
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+    (label :text "\\ue3aa" :class "icon-label")
+    (slider :variable brightness_percent :onchange "brightnessctl s {}% && eww update brightness_percent={}")
+    ))
+
+;; Mic Popup
+(defwindow mic_popup
+  :monitor 0
+  :geometry (geometry :x "0%" :y "10px" :width "200px" :height "50px" :anchor "bottom center")
+  :stacking "overlay" :windowtype "dock" :wm-ignore false
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+    (mic_icon)
+    (label :text {mic_mute == 'unmuted' ? "Mic Unmuted" : "Mic Muted"} :class "popup-label")
+    ))
+
+;; Network Popup
+(defwindow network_popup
+  :monitor 0
+  :geometry (geometry :x "0%" :y "10px" :width "300px" :height "50px" :anchor "bottom center")
+  :stacking "overlay" :windowtype "dock" :wm-ignore false
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+    (wifi_icon)
+    (label :text {wifi_state == 'Enabled' ? wifi_ssid : wifi_state} :class "popup-label")
+    ))
+
+;; Battery Popup
+(defwindow battery_popup
+  :monitor 0
+  :geometry (geometry :x "0%" :y "10px" :width "200px" :height "50px" :anchor "bottom center")
+  :stacking "overlay" :windowtype "dock" :wm-ignore false
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+    (battery_icon)
+    (label :text "${battery_status}: ${battery_percent}%" :class "popup-label")
+    ))
+
+;; Background Helper
+(defwindow empty
+    :monitor 0
+    :geometry (geometry :x "0px" :y "0px" :width "1920px" :height "1080px" :anchor "center bottom")
+    :stacking "fg" :windowtype "desktop" :wm-ignore false :namespace "empty"
+    (eventbox :onclick "withbg --close" :class "empty"
+    (box :class "empty" (label :class "empty"))))
