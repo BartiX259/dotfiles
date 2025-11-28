@@ -1,2 +1,4 @@
 .config/nvim
 .config/nvim/**
+README.md
+run_*

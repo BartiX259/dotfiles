@@ -5,22 +5,22 @@ import = ["~/.config/alacritty/colors.toml"]
 draw_bold_text_with_bright_colors = true
 
 [font]
-size = 11
+size = {{ .font_size }}
 
 [font.bold]
-family = "JetBrainsMono Nerd Font"
+family = "{{ .font_family }}"
 style = "Bold"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
+family = "{{ .font_family }}"
 style = "BoldItalic"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
+family = "{{ .font_family }}"
 style = "MediumItalic"
 
 [font.normal]
-family = "JetBrainsMono Nerd Font"
+family = "{{ .font_family }}"
 style = "SemiBold"
 
 [scrolling]
@@ -31,7 +31,7 @@ multiplier = 3
 save_to_clipboard = false
 
 [terminal.shell]
-program = "/bin/fish"
+program = "{{ .shell }}"
 
 [window]
 dynamic_title = false

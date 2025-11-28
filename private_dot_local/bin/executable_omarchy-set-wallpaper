@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+wall="$1"
+cache_dir="$HOME/.cache/bgblur"
+rofi_bg="$HOME/.cache/bgrofi.png"
+blur_strength="0x8"
+
+mkdir -p "$cache_dir"
+
+rm $rofi_bg
+
+# 1. Set normal wallpaper
+swww img "$wall" --transition-type wipe --transition-angle 30 --transition-duration 1 --transition-fps 60
+
+# 2. Create unique cache file for this wallpaper (for blur)
+filename="$(basename "$wall")"
+blurred_cache="$cache_dir/${filename%.*}_blurred.${filename##*.}"
+
+# Cache blurred wallpaper if missing or outdated
+if [ ! -f "$blurred_cache" ] || [ "$wall" -nt "$blurred_cache" ]; then
+    echo "Generating blurred cache for $filename..."
+    magick convert "$wall" -blur "$blur_strength" "$blurred_cache"
+fi
+
+# 3. Set blurred wallpaper for overview
+swww img "$blurred_cache" -n blur --transition-step 4 --transition-fps 60
+
+# 4. Update colors
+matugen image "$wall"
+
+# 5. Generate Rofi background
+# We convert to PNG (so extension is fixed) and resize height to 720px.
+# This makes Rofi open instantly compared to loading a full 4K image.
+magick "$wall" -resize "800x600^" -gravity center -extent 800x600 "$rofi_bg"

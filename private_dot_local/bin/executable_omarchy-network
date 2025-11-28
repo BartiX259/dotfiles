@@ -1,0 +1,47 @@
+#!/usr/bin/env sh
+# shellcheck disable=2016
+
+# Dependencies check
+if ! command -v fzf >/dev/null 2>&1 || ! command -v nmcli >/dev/null 2>&1; then
+    echo "Error: fzf and nmcli are required." >&2
+    exit 1
+fi
+
+# Authentication handling
+ask=""
+if command -v nm-applet >/dev/null 2>&1; then
+    if ! pgrep -x nm-applet >/dev/null 2>&1; then
+        nohup nm-applet >/dev/null 2>&1 </dev/null &
+        trap "kill $!" EXIT TERM INT
+        sleep 0.5
+    fi
+else
+    ask="--ask"
+fi
+
+# Formatting
+opts='--colors yes --escape yes'
+wifi_fields='BSSID,SSID,SECURITY,CHAN,BARS,SIGNAL,RATE,MODE,IN-USE'
+wifi_actions='(enter: connect) (ctrl-d: disconnect) (ctrl-r: rescan) (ctrl-t: toggle wifi)'
+
+# Define the command and export it so fzf subshells can see it
+LIST_CMD="nmcli $opts --fields '$wifi_fields' device wifi list"
+export LIST_CMD
+
+# Launch FZF
+# Note: We use 'eval' inside the bindings to properly handle the spaces/quotes in LIST_CMD
+eval "$LIST_CMD" | fzf \
+    --ansi \
+    --delimiter='  ' \
+    --header-lines=1 \
+    --header="$wifi_actions" \
+    --bind='ctrl-r:reload(eval "$LIST_CMD --rescan yes")' \
+    --bind='ctrl-t:execute(nmcli radio wifi $([ "$(nmcli radio wifi)" = "enabled" ] && echo "off" || echo "on"))+reload(eval "$LIST_CMD")' \
+    --bind='ctrl-d:execute(nmcli connection down {2})+reload(eval "$LIST_CMD")' \
+    --bind='enter:execute(
+        if [ "$(echo {} | awk -F"[ ][ ]*" "{print \$NF}")" = "*" ]; then
+            nmcli connection down {2}
+        else
+            nmcli '"$ask"' device wifi connect {2}
+        fi
+    )+reload(eval "$LIST_CMD")'

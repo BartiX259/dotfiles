@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# 1. Setup state management
+# "repo" state = Native packages (pacman -Qnqe)
+# "aur" state  = Foreign packages (pacman -Qmqe)
+MODE_FILE=$(mktemp)
+echo "repo" >"$MODE_FILE"
+trap "rm -f $MODE_FILE" EXIT
+
+# 2. Define Commands
+CMD_REPO="pacman -Qnqe" # Query Native Explicit
+CMD_AUR="pacman -Qmqe"  # Query Foreign Explicit (AUR)
+
+# Preview: pacman -Qi works for any locally installed package
+CMD_PREVIEW="pacman -Qi {1}"
+
+# Toggle Logic: Flip state -> Update Prompt -> Reload List
+BIND_TOGGLE="execute-silent(if [[ \$(cat $MODE_FILE) == 'repo' ]]; then echo 'aur' > $MODE_FILE; else echo 'repo' > $MODE_FILE; fi)+transform-prompt(if [[ \$(cat $MODE_FILE) == 'repo' ]]; then echo 'pacman> '; else echo 'AUR> '; fi)+reload(if [[ \$(cat $MODE_FILE) == 'repo' ]]; then $CMD_REPO; else $CMD_AUR; fi)"
+
+fzf_args=(
+  --multi
+  --prompt='pacman> '
+  --header='ctrl+a: switch pacman/aur | space: select | ctrl+p: toggle preview'
+  --preview "$CMD_PREVIEW"
+  --preview-label='ctrl-d/u: scroll page | ctrl-j/k: scroll line'
+  --preview-label-pos='bottom'
+
+  # Static ratio
+  --preview-window 'down:50%:wrap'
+
+  # Bindings
+  --bind "ctrl-a:$BIND_TOGGLE"
+  --bind 'space:toggle'
+  --bind 'ctrl-p:toggle-preview'
+  --bind 'ctrl-d:preview-half-page-down'
+  --bind 'ctrl-u:preview-half-page-up'
+  --bind 'ctrl-k:preview-up'
+  --bind 'ctrl-j:preview-down'
+
+  # Colors (Red to indicate removal/danger)
+  --color 'pointer:red,marker:red,prompt:blue,header:yellow'
+)
+
+# 3. Run FZF
+# Start with pacman (Native) packages
+pkg_names=$($CMD_REPO | fzf "${fzf_args[@]}")
+
+# 4. Handle Removal
+if [[ -n "$pkg_names" ]]; then
+  echo "Selected packages for removal:"
+  echo "$pkg_names"
+
+  mapfile -t pkgs <<<"$pkg_names"
+
+  echo ""
+  # pacman -Rns handles removal for both standard and AUR packages
+  sudo pacman -Rns "${pkgs[@]}"
+
+  if command -v omarchy-show-done &>/dev/null; then
+    omarchy-show-done
+  fi
+fi

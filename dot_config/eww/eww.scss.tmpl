@@ -8,8 +8,8 @@ $bg-slider:     $surface-container;
 /* Global styles */
 * {
   all: unset;
-  font-family: "JetBrainsMono Nerd Font", monospace;
-  font-size: 14px;
+  font-family: "{{ .font_family }}", monospace;
+  font-size: {{ .font_size }}px;
 }
 
 /* Base popup styles */
@@ -29,21 +29,21 @@ $bg-slider:     $surface-container;
 scale trough {
   all: unset;
   background-color: $bg-slider;
-  border-radius: 5px;
-  min-height: 10px;
-  min-width: 120px;
+  border-radius: {{ .font_size }}px;
+  min-height: {{ sub .font_size 5 }}px;
+  min-width: {{ mul .font_size 10 }}px;
 }
 
 scale trough highlight {
   background-color: $fg-color;
-  border-radius: 5px 0px 0px 5px;
+  border-radius: {{ .font_size }}px 0px 0px {{ .font_size }}px;
 }
 scale slider {
   all: unset;
   background-color: $fg-color;
   border-radius: 2px;
-  min-height: 14px;
-  min-width: 4px;
+  min-height: {{ add .font_size 2 }}px;
+  min-width: {{ div .font_size 3 }}px;
   margin: -2px;
   margin-right: 3px;
 }
@@ -51,7 +51,7 @@ scale slider {
 /* Icon Font Definitions */
 .icon-label {
   font-family: "Material Symbols Rounded";
-  font-size: 24px;
+  font-size: {{ add .font_size 12 }}px;
   color: $fg-color;
 }
 

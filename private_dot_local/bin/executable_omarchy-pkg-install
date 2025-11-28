@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# 1. Detect AUR helper (yay or paru)
+if command -v yay &>/dev/null; then
+  AUR_HELPER="yay"
+elif command -v paru &>/dev/null; then
+  AUR_HELPER="paru"
+else
+  echo "Error: Could not find 'yay' or 'paru'. Install one to use AUR features."
+  exit 1
+fi
+
+# 2. Setup state management (pacman vs AUR)
+MODE_FILE=$(mktemp)
+echo "repo" >"$MODE_FILE"
+trap "rm -f $MODE_FILE" EXIT
+
+# 3. Define Commands
+CMD_REPO="pacman -Slq"
+CMD_AUR="$AUR_HELPER -qSs"
+
+# Preview command: checks mode file to decide which tool to use
+CMD_PREVIEW="if [[ \$(cat $MODE_FILE) == 'repo' ]]; then pacman -Sii {1}; else $AUR_HELPER -Si {1}; fi"
+
+# Toggle Logic: flips mode file, updates prompt, reloads list
+BIND_TOGGLE="execute-silent(if [[ \$(cat $MODE_FILE) == 'repo' ]]; then echo 'aur' > $MODE_FILE; else echo 'repo' > $MODE_FILE; fi)+transform-prompt(if [[ \$(cat $MODE_FILE) == 'repo' ]]; then echo 'pacman> '; else echo 'AUR> '; fi)+reload(if [[ \$(cat $MODE_FILE) == 'repo' ]]; then $CMD_REPO; else $CMD_AUR; fi)"
+
+fzf_args=(
+  --multi
+  --prompt='pacman> '
+  --header='ctrl+a: switch pacman/aur | space: select | ctrl+p: toggle preview'
+  --preview "$CMD_PREVIEW"
+  --preview-label='ctrl-d/u: scroll page | ctrl-j/k: scroll line'
+  --preview-label-pos='bottom'
+
+  # CHANGE THE RATIO HERE (e.g., change 50% to 40% or 70%)
+  --preview-window 'down:50%:wrap'
+
+  # Bindings
+  --bind "ctrl-a:$BIND_TOGGLE"
+  --bind 'space:toggle'
+  --bind 'ctrl-p:toggle-preview'
+  --bind 'ctrl-d:preview-half-page-down'
+  --bind 'ctrl-u:preview-half-page-up'
+  --bind 'ctrl-k:preview-up'
+  --bind 'ctrl-j:preview-down'
+
+  # Colors
+  --color 'pointer:green,marker:green,prompt:blue,header:yellow'
+)
+
+# Run FZF
+pkg_names=$($CMD_REPO | fzf "${fzf_args[@]}")
+
+# 4. Handle Installation
+if [[ -n "$pkg_names" ]]; then
+  FINAL_MODE=$(cat "$MODE_FILE")
+
+  echo "Selected packages:"
+  echo "$pkg_names"
+
+  mapfile -t pkgs <<<"$pkg_names"
+
+  echo ""
+  if [[ "$FINAL_MODE" == "repo" ]]; then
+    echo "Installing with pacman..."
+    sudo pacman -S "${pkgs[@]}"
+  else
+    echo "Installing from AUR (using $AUR_HELPER)..."
+    $AUR_HELPER -S "${pkgs[@]}"
+  fi
+
+  if command -v omarchy-show-done &>/dev/null; then
+    omarchy-show-done
+  fi
+fi

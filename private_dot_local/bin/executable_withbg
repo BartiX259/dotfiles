@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+# Configuration
+cache="$HOME/.cache/withbg"
+mkdir -p "$(dirname "$cache")"
+[ ! -f "$cache" ] && touch "$cache"
+
+# Helper to silence output
+silent() { "$@" >/dev/null 2>&1; }
+
+if [ $# -lt 1 ]; then
+    echo "Usage: withbg <command> [args...]" >&2
+    exit 1
+fi
+
+# Read current process info
+read -r curpid curname < "$cache"
+
+# --- Close Mode ---
+if [[ "$1" = "--close" ]]; then
+    if [ -n "$curpid" ]; then
+        silent kill -USR1 "$curpid"
+        echo "" > "$cache"
+        silent eww close empty
+    fi
+    exit 0
+fi
+
+# Validate command
+if ! command -v "$1" >/dev/null 2>&1; then
+    echo "Error: '$1' is not a valid executable." >&2
+    exit 1
+fi
+
+new_command="$*"
+
+# --- Toggle Logic ---
+if [ -z "$curpid" ]; then
+    silent eww open empty
+else
+    # Kill existing process
+    silent kill -USR1 "$curpid"
+    
+    # If it was the same command, we are toggling OFF.
+    if [[ "$curname" = "$new_command" ]]; then
+        echo "" > "$cache"
+        silent eww close empty
+        exit 0
+    fi
+    # Wait briefly to ensure the old process released resources
+    sleep 0.1
+fi
+
+# Update cache
+echo "$$ $new_command" > "$cache"
+
+# --- Execution ---
+# Enable job control so we can background the process properly
+set -m
+
+# Run the command in the background.
+# We explicitly redirect input (<&0) to ensure it reads from the pipe 
+# if one exists, or the terminal if not.
+"$@" <&0 &
+
+process_pid=$!
+
+# Cleanup trap (runs when we kill this script via USR1)
+cleanup() {
+    silent kill -- "-$process_pid"
+    exit
+}
+trap cleanup USR1
+
+# Wait for Rofi/Command to finish naturally
+wait "$process_pid" 2>/dev/null
+
+# Close background after command finishes
+silent eww close empty
+echo "" > "$cache"

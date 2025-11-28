@@ -1,0 +1,4 @@
+#!/bin/bash
+printf "\e[38;5;212;1m󰚰 System update\e[0m\n"
+yay -Syu
+omarchy-show-done

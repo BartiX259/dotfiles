@@ -71,7 +71,7 @@
   :monitor 0
   :geometry (geometry :x "0%" :y "10px" :width "200px" :height "50px" :anchor "bottom center")
   :stacking "overlay" :windowtype "dock" :wm-ignore false
-  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center" :valign "center"
     (label :text "\\ue3aa" :class "icon-label")
     (slider :variable brightness_percent :onchange "brightnessctl s {}% && eww update brightness_percent={}")
     ))

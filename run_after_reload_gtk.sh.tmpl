@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Retrieve the theme from your config
+THEME="{{ .gtk_theme }}"
+FONT="{{ .font_family }} {{ .font_size }}"
+CURSOR="{{ .cursor_theme }}"
+
+# Font
+gsettings set org.gnome.desktop.interface font-name "$FONT"
+
+# Cursor
+gsettings set org.gnome.desktop.interface cursor-theme "$CURSOR"
+
+# Theme
+gsettings set org.gnome.desktop.interface gtk-theme ''
+sleep 0.1
+gsettings set org.gnome.desktop.interface gtk-theme "$THEME"
+

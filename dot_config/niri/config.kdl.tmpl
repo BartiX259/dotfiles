@@ -107,6 +107,19 @@ input {
     position x=1280 y=0
 }
 
+cursor {
+    xcursor-theme "{{ .cursor_theme }}"
+    xcursor-size {{ .cursor_size }}
+
+    // hide-when-typing
+    // hide-after-inactive-ms 1000
+}
+
+environment {
+    EDITOR "{{ .editor }}"
+    SHELL "{{ .shell }}"
+}
+
 // Settings that influence how windows are positioned and sized.
 // Find more information on the wiki:
 // https://yalter.github.io/niri/Configuration:-Layout
@@ -385,9 +398,9 @@ binds {
 
     // Super+Super_L repeat=false { toggle-overview; }
 
-    Mod+Q repeat=false hotkey-overlay-title="Open a Terminal: alacritty" { spawn "alacritty"; }
-    Mod+W repeat=false hotkey-overlay-title="Open a Browser: firefox" { spawn "firefox"; }
-    Mod+E repeat=false hotkey-overlay-title="Open a File explorer: nemo" { spawn "nemo"; }
+    Mod+Q repeat=false hotkey-overlay-title="Open a Terminal: {{ .terminal }}" { spawn "{{ .terminal }}"; }
+    Mod+W repeat=false hotkey-overlay-title="Open a Browser: {{ .browser }}" { spawn "{{ .browser }}"; }
+    Mod+E repeat=false hotkey-overlay-title="Open a File explorer: {{ .files }}" { spawn "{{ .files }}"; }
     Mod+D repeat=false { toggle-overview; }
     Mod+Tab repeat=false { toggle-overview; }
     Mod+A repeat=false { close-window; }
