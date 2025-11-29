@@ -50,7 +50,8 @@
 (defvar is_headphone "no")
 (defvar mic_mute "muted")
 (defvar battery_status "Unknown")
-(defvar battery_percent 0)
+(defpoll battery_percent :interval "2s"
+  "acpi -b | head -n1 | awk -F',' '{print $2}' | tr -d ' %'")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WINDOWS

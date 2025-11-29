@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo
 gum spin --spinner "moon" --title "Done! Press any key to close..." -- bash -c 'read -n 1 -s'

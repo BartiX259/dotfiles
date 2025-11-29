@@ -17,10 +17,14 @@ $EWW_CMD update mic_mute=$(pactl get-source-mute @DEFAULT_SOURCE@ | grep -q 'yes
 $EWW_CMD update brightness_percent=$(awk "BEGIN {print int($(brightnessctl g) * 100 / $(brightnessctl m))}")
 
 # Battery
-ACPI_OUTPUT=$(acpi -b)
+ACPI_OUTPUT=$(acpi -b | head -n1)
 if [ -n "$ACPI_OUTPUT" ]; then
-    $EWW_CMD update battery_status=$(echo "$ACPI_OUTPUT" | awk '{print $3}' | tr -d ',')
-    $EWW_CMD update battery_percent=$(echo "$ACPI_OUTPUT" | awk '{print $4}' | tr -d '%,')
+  STATUS=$(echo "$ACPI_OUTPUT" | sed 's/^.*: //; s/,.*//')
+  PERCENT=$(echo "$ACPI_OUTPUT" | awk -F',' '{print $2}' | tr -d ' %')
+  if [[ "$STATUS" == "Not charging" ]]; then
+    STATUS="Full"
+  fi
+  $EWW_CMD update battery_status="$STATUS" battery_percent="$PERCENT"
 fi
 
 # Wifi

@@ -1,18 +1,78 @@
-#!/bin/sh
+#!/bin/bash
 
-# Retrieve the theme from your config
 THEME="{{ .gtk_theme }}"
 FONT="{{ .font_family }} {{ .font_size }}"
 CURSOR="{{ .cursor_theme }}"
+DARK_MODE="{{ .prefer_dark }}"
 
-# Font
+TERM_BIN="{{ .terminal }}"
+BROWSER_BIN="{{ .browser }}"
+EDITOR_BIN="{{ .editor }}"
+FILE_BIN="{{ .files }}"
+
+get_desktop_name() {
+    local bin="$1"
+    local search_paths=("$HOME/.local/share/applications" "/usr/share/applications")
+    local match=""
+
+    for dir in "${search_paths[@]}"; do
+        [ ! -d "$dir" ] && continue
+
+        match=$(find "$dir" -maxdepth 1 -iname "${bin}.desktop" -print -quit 2>/dev/null)
+        if [ -n "$match" ]; then
+            basename "$match"
+            return
+        fi
+
+        match=$(find "$dir" -maxdepth 1 -iname "*.${bin}.desktop" -print -quit 2>/dev/null)
+        if [ -n "$match" ]; then
+            basename "$match"
+            return
+        fi
+    done
+
+    for dir in "${search_paths[@]}"; do
+        [ ! -d "$dir" ] && continue
+        
+        match=$(grep -l -E "^Exec=.*(\s|\/|^)${bin}(\s|$|%)" "$dir"/*.desktop 2>/dev/null | head -n 1)
+        if [ -n "$match" ]; then
+            basename "$match"
+            return
+        fi
+    done
+
+    echo "${bin}.desktop"
+}
+
+echo "Resolving .desktop files..."
+BROWSER_DESKTOP=$(get_desktop_name "$BROWSER_BIN")
+EDITOR_DESKTOP=$(get_desktop_name "$EDITOR_BIN")
+FILE_DESKTOP=$(get_desktop_name "$FILE_BIN")
+
+echo "  Browser: $BROWSER_BIN -> $BROWSER_DESKTOP"
+echo "  Editor:  $EDITOR_BIN  -> $EDITOR_DESKTOP"
+echo "  Files:   $FILE_BIN    -> $FILE_DESKTOP"
+
+echo "Applying GTK Styling..."
+
 gsettings set org.gnome.desktop.interface font-name "$FONT"
-
-# Cursor
 gsettings set org.gnome.desktop.interface cursor-theme "$CURSOR"
 
-# Theme
 gsettings set org.gnome.desktop.interface gtk-theme ''
 sleep 0.1
 gsettings set org.gnome.desktop.interface gtk-theme "$THEME"
+
+if [ "$DARK_MODE" -eq 1 ]; then
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+else
+    gsettings set org.gnome.desktop.interface color-scheme 'default'
+fi
+
+echo "Setting XDG Default Apps..."
+
+xdg-mime default "$BROWSER_DESKTOP" x-scheme-handler/http
+xdg-mime default "$BROWSER_DESKTOP" x-scheme-handler/https
+xdg-mime default "$BROWSER_DESKTOP" text/html
+xdg-mime default "$FILE_DESKTOP" inode/directory
+xdg-mime default "$EDITOR_DESKTOP" text/plain
 

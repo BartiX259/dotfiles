@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 wall="$1"
 cache_dir="$HOME/.cache/bgblur"
@@ -18,8 +18,8 @@ blurred_cache="$cache_dir/${filename%.*}_blurred.${filename##*.}"
 
 # Cache blurred wallpaper if missing or outdated
 if [ ! -f "$blurred_cache" ] || [ "$wall" -nt "$blurred_cache" ]; then
-    echo "Generating blurred cache for $filename..."
-    magick convert "$wall" -blur "$blur_strength" "$blurred_cache"
+  echo "Generating blurred cache for $filename..."
+  magick convert "$wall" -blur "$blur_strength" "$blurred_cache"
 fi
 
 # 3. Set blurred wallpaper for overview
