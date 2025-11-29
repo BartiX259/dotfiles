@@ -46,6 +46,7 @@
 (defvar brightness_percent 0)
 (defvar wifi_ssid "...")
 (defvar wifi_state "disabled")
+(defvar time "...")
 (defvar speaker_mute "muted")
 (defvar is_headphone "no")
 (defvar mic_mute "muted")
@@ -105,6 +106,16 @@
   (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
     (battery_icon)
     (label :text "${battery_status}: ${battery_percent}%" :class "popup-label")
+    ))
+
+;; Time popup
+(defwindow time_popup
+  :monitor 0
+  :geometry (geometry :x "0%" :y "10px" :width "400px" :height "50px" :anchor "bottom center")
+  :stacking "overlay" :windowtype "dock" :wm-ignore false
+  (box :class "popup-box" :orientation "h" :spacing 15 :space-evenly false :halign "center"
+    (label :text "\\ue8b5" :class "icon-label")
+    (label :text "${time}" :class "popup-label")
     ))
 
 ;; Background Helper

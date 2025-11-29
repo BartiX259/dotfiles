@@ -20,6 +20,7 @@ tooltip,
     background: alpha(#262626, 0.999);
     border-radius: 8px;
     padding: 1px 2px;
+    font-size: {{ add .font_size 2 }}px;
 }
 
 #top,
@@ -80,7 +81,7 @@ box.empty {
 
 #clock {
     /* padding-left: 4px; */
-    font-size: {{ .font_size }}px;
+    font-size: {{ add .font_size 1 }}px;
 }
 
 

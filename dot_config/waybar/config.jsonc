@@ -35,8 +35,11 @@
                 "\ue63e"
             ],
             "format": "\ue648",
-            "tooltip": false,
-            "on-click": "~/.config/rofi/menu.sh"
+            "on-click": "~/.config/rofi/menu.sh",
+            "tooltip-format": "{ifname} via {gwaddr}",
+            "tooltip-format-wifi": "{signalStrength}% {essid}",
+            "tooltip-format-ethernet": "{ifname}",
+            "tooltip-format-disconnected": "Disconnected",
         },
         "pulseaudio": {
             "format": "{icon}",
@@ -50,8 +53,8 @@
                 ]
             },
             "scroll-step": 1,
-            "tooltip": false,
-            "on-click": "~/.config/rofi/menu.sh"
+            "on-click": "~/.config/rofi/menu.sh",
+            "tooltip-format": "{volume}% {desc}"
         },
         "battery": {
             "states": {
@@ -82,8 +85,8 @@
                 ]
             },
             "interval": 5,
-            "tooltip": false,
-            "on-click": "~/.config/rofi/menu.sh"
+            "on-click": "~/.config/rofi/menu.sh",
+            "tooltip-format": "{capacity}% {timeTo}"
         },
         "custom/separator": {
             "format": "\uf108",
@@ -92,8 +95,8 @@
         },
         "clock": {
             "format": "{:%H\n%M}",
-            "tooltip": false,
-            "on-click": "~/.config/rofi/menu.sh"
+            "on-click": "~/.config/rofi/menu.sh",
+            "tooltip-format": "{:%A %d.%m %H:%M}"
         }
     }
 ]
