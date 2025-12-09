@@ -13,7 +13,7 @@ configuration {
 
 * {
     /* --- Font Settings --- */
-    font: "JetBrainsMono Nerd Font, Regular 12";
+    font: "{{ .font_family }}, Regular {{ sub .font_size 1 }}";
 
     /* --- Color Mapping --- */
     /* We map the raw matugen colors to sematic variables used below */
@@ -32,6 +32,7 @@ window {
     anchor:                      center;
     fullscreen:                  false;
     width:                       1000px;
+    height:                      500px;
     
     enabled:                     true;
     border-radius:               15px;
@@ -54,7 +55,7 @@ mainbox {
 imagebox {
     padding:                     20px;
     background-color:            transparent;
-    background-image:            url("~/.cache/bgrofi.png", height);
+    background-image:            url("~/.cache/bgrofi.png");
     orientation:                 vertical;
     children:                    [ "inputbar", "dummy" ];
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 EWW_CMD="eww -c $HOME/.config/eww"
-TIMEOUT_CMD="$HOME/.config/eww/scripts/ewwtimeout.sh"
+TIMEOUT_CMD="ewwtimeout"
 
 get_sink_state() {
   local vol mute is_headphone

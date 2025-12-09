@@ -29,6 +29,4 @@ swww img "$blurred_cache" -n blur --transition-step 4 --transition-fps 60
 matugen image "$wall"
 
 # 5. Generate Rofi background
-# We convert to PNG (so extension is fixed) and resize height to 720px.
-# This makes Rofi open instantly compared to loading a full 4K image.
-magick "$wall" -resize "800x600^" -gravity center -extent 800x600 "$rofi_bg"
+magick "$wall" -resize "500x500^" -gravity center -extent 500x500 "$rofi_bg"

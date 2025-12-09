@@ -28,13 +28,31 @@ wall_selection=$(ls "$wall_dir" | while read -r A; do
 	echo -en "$A\x00icon\x1f$cache_dir/$A\n"
 done | withbg rofi \
 	-dmenu \
+	-kb-custom-1 "d" \
+  -kb-custom-2 "c" \
+  -mesg "<b>enter</b>: set   <b>d</b>: delete   <b>c</b>: clear cache" \
 	-config "$HOME/.config/rofi/bgselector.rasi" \
 	-theme-str "window { width: ${window_width}px; }")
 
-# Set wallpaper and update waybar color
-if [ -n "$wall_selection" ]; then
+rofi_exit_code=$?
+
+if [ -z "$wall_selection" ]; then
+    exit 1
+fi
+
+if [ "$rofi_exit_code" -eq 0 ]; then
+  # Set wallpaper
 	omarchy-set-wallpaper "$wall_dir/$wall_selection"
 	exit 0
+elif [ "$rofi_exit_code" -eq 10 ]; then
+  # Delete wallpaper
+  rm "$wall_dir/$wall_selection"
+  rm -f "$cache_dir/$wall_selection"
+  exec "$0"
+elif [ "$rofi_exit_code" -eq 11 ]; then
+  # Clear cache
+  rm -f "$cache_dir"/*
+  exec "$0"
 else
 	exit 1
 fi

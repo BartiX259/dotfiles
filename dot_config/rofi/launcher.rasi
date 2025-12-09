@@ -13,8 +13,3 @@ configuration {
 /*****----- Import Library -----*****/
 @import "theme.rasi"
 
-/* Override: You can change specific things here if you want */
-window {
-    /* For example, the launcher can be wider if you want */
-    width: 900px; 
-}

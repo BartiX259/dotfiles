@@ -1,7 +1,6 @@
 # dotfiles
 
 Managed via [chezmoi](https://www.chezmoi.io/).
-Includes automatic setup for Arch and Alpine.
 
 ## Installation
 
@@ -25,18 +24,10 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply BartiX259
 
 ## Dependencies
 
-List of all the packages used by the config (for arch, names might be different on other distros):
+List of all the packages used by the config (names are for arch, might be different on other distros):
 
 ```
-alacritty neovim fish waybar rofi-wayland niri nemo firefox fzf jq fd gum imagemagick mako swww networkmanager pamixer matugen wiremix ttf-jetbrains-mono-nerd ttf-material-symbols-variable
-```
-
-On a laptop:
-
-```
-acpi brightnessctl
-```
-```
+alacritty neovim fish waybar rofi-wayland niri nemo firefox fzf jq fd ripgrep gum imagemagick mako swww networkmanager pamixer matugen wiremix ttf-jetbrains-mono-nerd ttf-material-symbols-variable
 ```
 
 AUR/compile from source:
@@ -44,3 +35,16 @@ AUR/compile from source:
 ```
 eww bibata-cursor-theme-bin
 ```
+
+On a laptop:
+
+```
+acpi brightnessctl
+```
+
+Extra personal packages:
+
+```
+backlight-openrc ly-openrc github-cli less unzip btop fastfetch ripdrag(aur)
+```
+

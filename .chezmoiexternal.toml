@@ -1,5 +1,5 @@
 [".config/nvim"]
     type = "git-repo"
-    url = "https://github.com/BartiX259/lazyvim.git"
+    url = "https://github.com/BartiX259/zenvim.git"
     refreshPeriod = "168h"
 

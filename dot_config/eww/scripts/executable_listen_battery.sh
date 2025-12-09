@@ -1,7 +1,7 @@
 export SHELL=/bin/bash
 
 EWW_CMD="eww -c $HOME/.config/eww"
-TIMEOUT_CMD="$HOME/.config/eww/scripts/ewwtimeout.sh"
+TIMEOUT_CMD="ewwtimeout"
 
 update_battery() {
   OLD_STATUS="$(eww get battery_status)"

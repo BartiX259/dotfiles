@@ -2,14 +2,6 @@
 background = '{{colors.background.default.hex}}'
 foreground = '{{colors.on_surface.default.hex}}'
  
-[colors.cursor]
-text = '{{colors.on_surface.default.hex}}'
-cursor = '{{colors.on_surface_variant.default.hex}}' 
- 
-[colors.vi_mode_cursor]
-text = '{{colors.background.default.hex}}'
-cursor = '{{colors.primary.default.hex}}' 
- 
 [colors.search.matches]
 foreground = '{{colors.surface_variant.default.hex}}' 
 background = '{{colors.tertiary.default.hex}}' 
@@ -36,33 +28,33 @@ background = '{{colors.primary.default.hex}}'
  
  
 [colors.normal]
-black = '#181818' 
+black = '#1c1c24' 
 red = '{{colors.error.default.hex}}' 
 green = '{{colors.primary.default.hex}}' 
 yellow = '{{colors.inverse_primary.default.hex}}' 
 blue = '{{colors.primary.default.hex}}' 
 magenta = '{{colors.tertiary.default.hex}}' 
 cyan = '{{colors.secondary.default.hex}}' 
-white = '#BAC2DE' 
+white = '#cdcdcd' 
  
  
 [colors.bright]
-black = '#585B70' 
-red = '#F38BA8' 
-green = '#A6E3A1' 
-yellow = '#F9E2AF' 
-blue = '#89B4FA' 
-magenta = '#F5C2E7' 
-cyan = '#94E2D5' 
-white = '#A6ADC8' 
+black = '#606079' 
+red = '#d8647e' 
+green = '#7fa563' 
+yellow = '#f3be7c' 
+blue = '#6e94b2' 
+magenta = '#aeaed1' 
+cyan = '#b4d4cf' 
+white = '#cdcdcd' 
  
  
 [colors.dim]
-black = '#45475A' 
-red = '#F38BA8' 
-green = '#A6E3A1' 
-yellow = '#F9E2AF' 
-blue = '#89B4FA' 
-magenta = '#F5C2E7' 
-cyan = '#94E2D5' 
-white = '#BAC2DE' 
+black = '#1c1c24' 
+red = '#d8647e' 
+green = '#7fa563' 
+yellow = '#f3be7c' 
+blue = '#6e94b2' 
+magenta = '#aeaed1' 
+cyan = '#b4d4cf' 
+white = '#cdcdcd'

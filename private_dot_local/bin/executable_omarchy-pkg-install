@@ -18,7 +18,7 @@ trap "rm -f $MODE_FILE" EXIT
 
 # 3. Define Commands
 CMD_REPO="pacman -Slq"
-CMD_AUR="$AUR_HELPER -qSs"
+CMD_AUR="$AUR_HELPER -Slq"
 
 # Preview command: checks mode file to decide which tool to use
 CMD_PREVIEW="if [[ \$(cat $MODE_FILE) == 'repo' ]]; then pacman -Sii {1}; else $AUR_HELPER -Si {1}; fi"

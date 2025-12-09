@@ -75,6 +75,10 @@ trap cleanup USR1
 # Wait for Rofi/Command to finish naturally
 wait "$process_pid" 2>/dev/null
 
+exit_code=$?
+
 # Close background after command finishes
 silent eww close empty
 echo "" > "$cache"
+
+exit "$exit_code"

@@ -134,6 +134,7 @@ layout {
     // - "on-overflow", focusing a column will center it if it doesn't fit
     //   together with the previously focused column.
     center-focused-column "never"
+    always-center-single-column
 
     // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
     preset-column-widths {
@@ -276,18 +277,23 @@ layout {
     }
 }
 
+include "colors.kdl"
+
 // Add lines like this to spawn processes at startup.
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-at-startup "swww-daemon" "-n" "blur"
 spawn-at-startup "swww-daemon"
+spawn-at-startup "swww-daemon" "-n" "blur"
 spawn-at-startup "waybar"
 //spawn-at-startup "~/.config/lightosd/target/release/lightosd"
 //spawn-at-startup "~/.config/lightosd/lightosd-c"
 spawn-sh-at-startup "eww daemon && ~/.config/eww/scripts/launch.sh"
-spawn-at-startup "dbus-launch" "pipewire"
+spawn-sh-at-startup "pipewire & pipewire-pulse & wireplumber"
+// spawn-at-startup "dbus-launch" "pipewire"
+// spawn-at-startup "dbus-launch" "pipewire-pulse"
+// spawn-sh-at-startup "sleep 0.5 && wireplumber"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -322,15 +328,17 @@ animations {
     // Slow down all animations by this factor. Values below 1 speed them up instead.
     // slowdown 3.0
 }
-layer-rule {
-    match namespace="^dms:blurwallpaper$"
-    place-within-backdrop true
-}
 
 layer-rule {
     match namespace="^swww-daemonblur$"
     place-within-backdrop true
 }
+
+layer-rule {
+    match namespace="^transparent$"
+    opacity 0.0
+}
+
 
 // Window rules let you adjust behavior for individual windows.
 // Find more information on the wiki:
@@ -381,6 +389,18 @@ window-rule {
     clip-to-geometry true
 }
 
+
+window-rule {
+    match app-id="^keypress.py$"
+    open-floating true
+    opacity 0.0
+    focus-ring {
+      off
+    }
+    default-window-height { proportion 0.7; }
+    default-column-width { proportion 0.55; }
+}
+
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
     // in the end. To find an XKB name for a particular key, you may use a program
@@ -398,7 +418,7 @@ binds {
 
     // Super+Super_L repeat=false { toggle-overview; }
 
-    Mod+Q repeat=false hotkey-overlay-title="Open a Terminal: {{ .terminal }}" { spawn "{{ .terminal }}"; }
+    Mod+Q repeat=false hotkey-overlay-title="Open a Terminal: {{ .terminal }}" { spawn-sh "{{ .terminal }} --working-directory \"$(omarchy-cmd-terminal-cwd)\""; }
     Mod+W repeat=false hotkey-overlay-title="Open a Browser: {{ .browser }}" { spawn "{{ .browser }}"; }
     Mod+E repeat=false hotkey-overlay-title="Open a File explorer: {{ .files }}" { spawn "{{ .files }}"; }
     Mod+D repeat=false { toggle-overview; }
@@ -408,11 +428,13 @@ binds {
     Mod+Space repeat=false hotkey-overlay-title="App launcher" { spawn-sh "~/.config/rofi/launcher.sh"; }
     Mod+S repeat=false hotkey-overlay-title="System menu" { spawn-sh "~/.config/rofi/menu.sh"; }
     Mod+X repeat=false hotkey-overlay-title="Power menu" { spawn-sh "~/.config/rofi/menu.sh 'Power Menu'"; }
-    Mod+B repeat=false hotkey-overlay-title="View battery" { spawn-sh "~/.config/eww/scripts/ewwtimeout.sh battery_popup 2"; }
-    Mod+N repeat=false hotkey-overlay-title="View network" { spawn-sh "~/.config/eww/scripts/ewwtimeout.sh network_popup 2"; }
-    Mod+M repeat=false hotkey-overlay-title="View microphone" { spawn-sh "~/.config/eww/scripts/ewwtimeout.sh mic_popup 2"; }
+    Mod+B repeat=false hotkey-overlay-title="View battery" { spawn-sh "ewwtimeout battery_popup 2"; }
+    Mod+N repeat=false hotkey-overlay-title="View network" { spawn-sh "ewwtimeout network_popup 2"; }
+    Mod+M repeat=false hotkey-overlay-title="View microphone" { spawn-sh "ewwtimeout mic_popup 2"; }
     Mod+T repeat=false hotkey-overlay-title="View time" { spawn-sh "~/.config/eww/scripts/show_time.sh 2"; }
 
+    KP_Insert repeat=false { spawn-sh "~/Projekty/cheatgpt/main.sh"; }
+    Ctrl+KP_Insert repeat=false { spawn-sh "~/Projekty/cheatgpt/main.sh a"; }
 
     // Audio
     XF86AudioRaiseVolume allow-when-locked=true {
@@ -445,8 +467,8 @@ binds {
     // or do a four-finger swipe up on a touchpad.
 
     Mod+Left  { focus-column-left; }
-    Mod+Down  { focus-window-down; }
-    Mod+Up    { focus-window-up; }
+    Mod+Down  { focus-workspace-down; }
+    Mod+Up    { focus-workspace-up; }
     Mod+Right { focus-column-right; }
     Mod+H     { focus-column-left; }
     Mod+J     { focus-workspace-down; }
@@ -454,12 +476,12 @@ binds {
     Mod+L     { focus-column-right; }
 
     Mod+Shift+Left  { move-column-left; }
-    Mod+Shift+Down  { move-window-down; }
-    Mod+Shift+Up    { move-window-up; }
+    Mod+Shift+Down  { move-column-to-workspace-down; }
+    Mod+Shift+Up    { move-column-to-workspace-up; }
     Mod+Shift+Right { move-column-right; }
     Mod+Shift+H     { move-column-left; }
-    Mod+Shift+J     { move-window-down-or-to-workspace-down; }
-    Mod+Shift+K     { move-window-up-or-to-workspace-up; }
+    Mod+Shift+J     { move-column-to-workspace-down; }
+    Mod+Shift+K     { move-column-to-workspace-up; }
     Mod+Shift+L     { move-column-right; }
 
     // Alternative commands that move across workspaces when reaching
@@ -661,7 +683,4 @@ gestures {
     off
   }
 }
-
-//include "dms/colors.kdl"
-//include "dms/layout.kdl"
 
