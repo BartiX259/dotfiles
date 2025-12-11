@@ -23,6 +23,11 @@ if [ "$num_wallpapers" -gt "$max_columns" ]; then
 fi
 window_width=$(( num_wallpapers * 230 ))
 
+mesg="<b>enter</b>: set   <b>d</b>: delete"
+if [ $num_wallpapers -gt 1 ]; then
+  mesg="$mesg   <b>c</b>: clear cache"
+fi
+
 # Run Rofi with dynamic width
 wall_selection=$(ls "$wall_dir" | while read -r A; do
 	echo -en "$A\x00icon\x1f$cache_dir/$A\n"
@@ -30,7 +35,7 @@ done | withbg rofi \
 	-dmenu \
 	-kb-custom-1 "d" \
   -kb-custom-2 "c" \
-  -mesg "<b>enter</b>: set   <b>d</b>: delete   <b>c</b>: clear cache" \
+  -mesg "$mesg" \
 	-config "$HOME/.config/rofi/bgselector.rasi" \
 	-theme-str "window { width: ${window_width}px; }")
 
