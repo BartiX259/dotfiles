@@ -10,7 +10,7 @@ mkdir -p "$cache_dir"
 rm $rofi_bg
 
 # 1. Set normal wallpaper
-swww img "$wall" --transition-type wipe --transition-angle 30 --transition-duration 1 --transition-fps 60
+awww img "$wall" --transition-type wipe --transition-angle 30 --transition-duration 1 --transition-fps 60
 
 # 2. Create unique cache file for this wallpaper (for blur)
 filename="$(basename "$wall")"
@@ -23,7 +23,7 @@ if [ ! -f "$blurred_cache" ] || [ "$wall" -nt "$blurred_cache" ]; then
 fi
 
 # 3. Set blurred wallpaper for overview
-swww img "$blurred_cache" -n blur --transition-step 4 --transition-fps 60
+awww img "$blurred_cache" -n blur --transition-step 4 --transition-fps 60
 
 # 4. Update colors
 matugen image "$wall"

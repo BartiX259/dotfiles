@@ -284,8 +284,8 @@ include "colors.kdl"
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
 
-spawn-at-startup "swww-daemon"
-spawn-at-startup "swww-daemon" "-n" "blur"
+spawn-at-startup "awww-daemon"
+spawn-at-startup "awww-daemon" "-n" "blur"
 spawn-at-startup "waybar"
 //spawn-at-startup "~/.config/lightosd/target/release/lightosd"
 //spawn-at-startup "~/.config/lightosd/lightosd-c"
@@ -330,7 +330,7 @@ animations {
 }
 
 layer-rule {
-    match namespace="^swww-daemonblur$"
+    match namespace="^awww-daemonblur$"
     place-within-backdrop true
 }
 
