@@ -5,6 +5,7 @@ FONT="{{ .font_family }} {{ .font_size }}"
 CURSOR="{{ .cursor_theme }}"
 DARK_MODE="{{ .prefer_dark }}"
 
+TERM_BIN="{{ .terminal }}"
 BROWSER_BIN="{{ .browser }}"
 EDITOR_BIN="{{ .editor }}"
 FILE_BIN="{{ .files }}"
@@ -66,6 +67,8 @@ if [ "$DARK_MODE" -eq 1 ]; then
 else
     gsettings set org.gnome.desktop.interface color-scheme 'default'
 fi
+
+gsettings set org.cinnamon.desktop.default-applications.terminal exec "$TERM_BIN"
 
 echo "Setting XDG Default Apps..."
 

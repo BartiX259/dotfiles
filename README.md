@@ -77,7 +77,7 @@ ILoveCandy
 ParallelDownloads = 5
 ```
 
-For artix, enable extra repo:
+- For artix, enable extra repo:
 
 ```bash
 # artix-archlinux-support must be installed
