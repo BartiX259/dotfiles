@@ -29,12 +29,12 @@ background = '{{colors.primary.default.hex}}'
  
 [colors.normal]
 black = '#1c1c24' 
-red = '{{colors.error.default.hex}}' 
-green = '{{colors.primary.default.hex}}' 
-yellow = '{{colors.inverse_primary.default.hex}}' 
-blue = '{{colors.primary.default.hex}}' 
-magenta = '{{colors.tertiary.default.hex}}' 
-cyan = '{{colors.secondary.default.hex}}' 
+red = '#d8647e' 
+green = '#7fa563' 
+yellow = '#f3be7c' 
+blue = '#6e94b2' 
+magenta = '#aeaed1' 
+cyan = '#b4d4cf' 
 white = '#cdcdcd' 
  
  

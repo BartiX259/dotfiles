@@ -7,7 +7,18 @@ blur_strength="0x8"
 
 mkdir -p "$cache_dir"
 
-rm $rofi_bg
+if [ "$wall" = "--restore" ]; then
+  wall=$(cat "$cache_dir/last")
+fi
+
+if [ ! -f "$wall" ]; then
+  echo "No wallpaper $wall"
+  exit
+fi
+
+if [ -f "$rofi_bg" ]; then
+  rm $rofi_bg
+fi
 
 # 1. Set normal wallpaper
 awww img "$wall" --transition-type wipe --transition-angle 30 --transition-duration 1 --transition-fps 60
@@ -22,11 +33,15 @@ if [ ! -f "$blurred_cache" ] || [ "$wall" -nt "$blurred_cache" ]; then
   magick convert "$wall" -blur "$blur_strength" "$blurred_cache"
 fi
 
+# Cache last selected
+realpath $wall > "$cache_dir/last"
+
 # 3. Set blurred wallpaper for overview
 awww img "$blurred_cache" -n blur --transition-step 4 --transition-fps 60
 
 # 4. Update colors
-matugen image "$wall"
+matugen image "$wall" --prefer less-saturation
 
 # 5. Generate Rofi background
-magick "$wall" -resize "500x500^" -gravity center -extent 500x500 "$rofi_bg"
+magick "$wall" -resize "560x200^" -gravity center -extent 560x200 "$rofi_bg"
+

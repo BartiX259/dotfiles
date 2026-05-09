@@ -13,3 +13,6 @@ configuration {
 /*****----- Import Library -----*****/
 @import "theme.rasi"
 
+entry {
+    placeholder: "Search";
+}
