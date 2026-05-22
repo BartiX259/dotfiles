@@ -2,6 +2,10 @@
 
 EWW_CMD="eww -c $HOME/.config/eww"
 
+$EWW_CMD daemon
+
+sleep 1
+
 ## -----------------------------------------------------
 ## Initial Values
 ## -----------------------------------------------------
@@ -18,14 +22,16 @@ $EWW_CMD update brightness_percent=$(awk "BEGIN {print int($(brightnessctl g) * 
 
 # Battery
 ACPI_OUTPUT=$(acpi -b | head -n1)
-if [ -n "$ACPI_OUTPUT" ]; then
-  STATUS=$(echo "$ACPI_OUTPUT" | sed 's/^.*: //; s/,.*//')
-  PERCENT=$(echo "$ACPI_OUTPUT" | awk -F',' '{print $2}' | tr -d ' %')
-  if [[ "$STATUS" == "Not charging" ]]; then
-    STATUS="Full"
-  fi
-  $EWW_CMD update battery_status="$STATUS" battery_percent="$PERCENT"
+while [ -z "$ACPI_OUTPUT" ]; do
+  sleep 0.2
+  ACPI_OUTPUT=$(acpi -b | head -n1)
+done
+STATUS=$(echo "$ACPI_OUTPUT" | sed 's/^.*: //; s/,.*//')
+PERCENT=$(echo "$ACPI_OUTPUT" | awk -F',' '{print $2}' | tr -d ' %')
+if [[ "$STATUS" == "Not charging" ]]; then
+  STATUS="Full"
 fi
+$EWW_CMD update battery_status="$STATUS" battery_percent="$PERCENT"
 
 # Wifi
 state=$(nmcli r wifi)

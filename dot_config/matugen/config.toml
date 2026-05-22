@@ -4,6 +4,10 @@
 input_path = '~/.config/matugen/templates/alacritty.toml'
 output_path = '~/.config/alacritty/colors.toml'
 
+[templates.foot]
+input_path = '~/.config/matugen/templates/foot.ini'
+output_path = '~/.config/foot/colors.ini'
+
 [templates.mako]
 input_path = '~/.config/matugen/templates/mako.ini'
 output_path = '~/.config/mako/colors'

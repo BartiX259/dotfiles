@@ -21,7 +21,7 @@ chezmoi init --apply BartiX259
 
 *   **WM:** Niri
 *   **Editor:** Neovim (External repo)
-*   **Terminal:** Alacritty
+*   **Terminal:** Foot
 *   **Shell:** Fish
 *   **Bar:** Waybar
 *   **OSD:** Eww
@@ -33,7 +33,7 @@ chezmoi init --apply BartiX259
 List of all the packages used by the config (names are for arch, might be different on other distros):
 
 ```
-alacritty neovim fish waybar rofi-wayland niri nemo firefox fzf jq fd ripgrep gum imagemagick mako awww networkmanager pamixer matugen wiremix xdg-utils wl-clipboard ttf-jetbrains-mono-nerd ttf-material-symbols-variable
+foot neovim fish waybar rofi-wayland niri nemo firefox fzf jq fd ripgrep gum imagemagick mako awww networkmanager pamixer matugen wiremix xdg-utils wl-clipboard ttf-jetbrains-mono-nerd ttf-material-symbols-variable
 ```
 
 AUR/compile from source:
